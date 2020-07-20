@@ -2,7 +2,7 @@ import React from 'react';
 import { FormControl, Row, Col } from 'react-bootstrap';
 
 const CountySelect = (props) => {
-    const optionsItem = props.options.map((el) => <option value={ el.val }>{ el.text }</option>);
+    const optionsItem = props.options.map((el, index) => <option value={ el.val } key={ index }>{ el.text }</option>);
     const getCounty = (e) => {
         const name = props.options.filter((el) => {
                 if (el.val === e.target.value) {
@@ -22,10 +22,9 @@ const CountySelect = (props) => {
         })
     }
     return (
-            <Row className="justify-content-md-center">
+            <Row className="justify-content-md-center mt-2 mb-2">
                 <Col md="5">
                     <FormControl as="select" custom
-                        class="offset-md-5 form-control col-md-3 mb-2 mt-2"
                         onChange={ getCounty.bind(this) }
                         value={ props.county.selected }
                     >

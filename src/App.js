@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { Container, Navbar } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -54,7 +53,7 @@ class App extends Component {
                 <Navbar  bg="dark" variant="dark" expand="lg">
                     <Navbar.Brand  href="#" >振興券郵局庫存速查</Navbar.Brand>
                 </Navbar>
-                <Container>
+                <Container >
                     <CountySelect
                         options={ this.state.cnOptions }
                         county={ this.state.county }
@@ -70,6 +69,7 @@ class App extends Component {
                         township={ this.state.township }
                     />
                 </Container>
+                <footer className="bg-light position-fixed fixed-bottom">made by listennn08.</footer>
             </div>
         );
     }

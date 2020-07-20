@@ -42,10 +42,10 @@ const TownshipSelect = (props) => {
         };
         props.callback({ township })
     }
-    const optionsItem = options.map(el => <option value={ el.val }>{ el.text }</option>);
+    const optionsItem = options.map((el, index) => <option value={ el.val } key={ index }>{ el.text }</option>);
     
     return ( props.county.selected &&
-        <Row className="justify-content-md-center">
+        <Row className="justify-content-md-center mb-2 mt-2">
             <Col md="5">
                 <FormControl as="select" custom
                     onChange={ getTownship.bind(this) }

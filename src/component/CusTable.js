@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import Table from 'react-bootstrap/Table';
 
@@ -36,34 +37,39 @@ const CusTable = (props) => {
     }, [props.township.selected]);
 	const urlBase = 'https://www.google.com.tw/maps/place/'
     const listItem = data.map((el, index) => (
-        <tr>
+        <tr key={ index }>
             <td>{ index + 1 }</td>
             <td>{ el.hsnNm }</td>
             <td>{ el.storeNm }</td>
             <td><a href={`${urlBase}${el.zipCd}${el.addr.replace(/\(.*\)/, '')}/@${el.latitude},${el.longitude}`} title="打開 google 地圖" target="_bland">{ el.addr }</a></td>
             <td>{ el.tel }</td>
-            <td>{ el.busiTime.split('<br>').map((el) => <div>{el}</div>) }</td>
-            <td>{ el.busiMemo.split('<br>').map((el) => <div>{el}</div>) }</td>
+            <td>{ el.busiTime.split('<br>').map((el, index) => <div key={`busiT${index}`}>{el}</div>) }</td>
+            <td>{ el.busiMemo.split('<br>').map((el, index) => <div key={`busiM${index}`}>{el}</div>) }</td>
             <td>{ el.total }</td>
         </tr>
 	))
     return(
-        <Table striped bordered hover>
-            <caption class="text-right">更新時間：{ updateTime }</caption>
+        <div className="position-relavtive">
+            <Table striped bordered hover className="position-relative">
+            <caption className="text-right">更新時間：{ updateTime }</caption>
             <thead>
-                <th>#</th>
-                <th>縣市名稱</th>
-                <th>分局名稱</th>
-                <th>地址</th>
-                <th>電話</th>
-                <th>營業時間</th>
-                <th>營業備註</th>
-                <th>存量</th>
+                <tr>
+                    <th>#</th>
+                    <th>縣市名稱</th>
+                    <th>分局名稱</th>
+                    <th>地址</th>
+                    <th>電話</th>
+                    <th>營業時間</th>
+                    <th>營業備註</th>
+                    <th>存量</th>
+                </tr>
             </thead>
             <tbody>
                 { listItem }
             </tbody>
         </Table>
+        <FontAwesomeIcon icon={["fas", "spinner"]} className={'fa-spin fa-3x fa-fw position-absolute absolute-center ' + (loading ? 'visible' : 'invisible')}/>
+        </div>
     )
 }
 export default CusTable;

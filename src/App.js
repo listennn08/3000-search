@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Container } from 'react-bootstrap'
+import { Container, Navbar } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CountySelect from  './component/CountySelect';
 import TownshipSelect from './component/TownshipSelect';
@@ -51,21 +51,10 @@ class App extends Component {
     render() {
         return (
             <div className="App">
+                <Navbar  bg="dark" variant="dark" expand="lg">
+                    <Navbar.Brand  href="#" >振興券郵局庫存速查</Navbar.Brand>
+                </Navbar>
                 <Container>
-                    {/* <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <p>
-                        Edit <code>src/App.js</code> and save to reload.
-                    </p>
-                    <a
-                        className="App-link"
-                        href="https://reactjs.org"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Learn React
-                    </a>
-                    </header> */}
                     <CountySelect
                         options={ this.state.cnOptions }
                         county={ this.state.county }

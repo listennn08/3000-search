@@ -53,7 +53,7 @@ class App extends Component {
                 <Navbar  bg="dark" variant="dark" expand="lg">
                     <Navbar.Brand  href="#" >振興券郵局庫存速查</Navbar.Brand>
                 </Navbar>
-                <Container >
+                <Container>
                     <CountySelect
                         options={ this.state.cnOptions }
                         county={ this.state.county }

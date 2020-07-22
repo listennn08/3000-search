@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import Table from 'react-bootstrap/Table';
+import { Table, Pagination, Spinner } from 'react-bootstrap';
 
 const CusTable = (props) => {
     const [data, setData] = useState([]);
@@ -24,10 +23,9 @@ const CusTable = (props) => {
                             })
                             .filter((el) => {
                                 return props.township.selected ? el.townNm === props.township.selected : el
-                            })
-                            .slice(page, page+100));
+                            }));
                 setLoading(false);
-            })
+            });
     }
     useEffect(() => {
         fetch();
@@ -35,8 +33,8 @@ const CusTable = (props) => {
     useEffect(() => {
         fetch();
     }, [props.township.selected]);
-	const urlBase = 'https://www.google.com.tw/maps/place/'
-    const listItem = data.map((el, index) => (
+    const urlBase = 'https://www.google.com.tw/maps/place/'
+    let listItem = data.slice(page*50, (page+1)*50).map((el, index) => (
         <tr key={ index }>
             <td>{ index + 1 }</td>
             <td>{ el.hsnNm }</td>
@@ -47,28 +45,78 @@ const CusTable = (props) => {
             <td>{ el.busiMemo.split('<br>').map((el, index) => <div key={`busiM${index}`}>{el}</div>) }</td>
             <td>{ el.total }</td>
         </tr>
-	))
+    ));
+    const changePage = (i) => {
+        if (i >= 0 && i <= totalPage) {
+            setPage(i);
+        }
+    }
+    let active = page;
+    let totalPage = data.length / 50;
+    let items = [];
+    for (let number = 0; number <= totalPage; number++) {
+        if (active < 3) {
+            if (number > 0 && number < active +4 || number > totalPage - 3) {
+                items.push(
+                    <Pagination.Item key={ number } active={ number === active } onClick={ () => changePage(number) }>
+                        {number+1}
+                    </Pagination.Item>,
+                );
+            } else if (number === active+5) {
+                items.push(<Pagination.Ellipsis key="ellipsis-1" />)
+            }
+        } else {
+            if (number > 0 && number < 2 || number > active - 2 && number < active + 2 || number > totalPage - 2) {
+                items.push(
+                    <Pagination.Item key={ number } active={ number === active } onClick={ () => changePage(number) }>
+                        {number+1}
+                    </Pagination.Item>,
+                );
+            } else if (number === active - 2 ) {
+                items.push(<Pagination.Ellipsis key="ellipsis-1" />)
+            } else if (number === active + 2) {
+                items.push(<Pagination.Ellipsis key="ellipsis-2" />)
+            } 
+        }
+
+    }
+
+    const paginationBasic = (
+        <div className="d-flex justify-content-center">
+            <Pagination>
+                <Pagination.First onClick={ () => changePage(1) } ></Pagination.First>
+                <Pagination.Prev onClick={ () => changePage(page-1) } />
+                <Pagination.Item onClick={ () => changePage(0) } >1</Pagination.Item>
+                { items }
+                <Pagination.Next onClick={ () => changePage(page+1) } />
+                <Pagination.Last onClick={ () => changePage(totalPage) } ></Pagination.Last>
+            </Pagination>
+        </div>
+    );
     return(
-        <div className="position-relavtive">
-            <Table striped bordered hover className="position-relative">
-            <caption className="text-right">更新時間：{ updateTime }</caption>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>縣市名稱</th>
-                    <th>分局名稱</th>
-                    <th>地址</th>
-                    <th>電話</th>
-                    <th>營業時間</th>
-                    <th>營業備註</th>
-                    <th>存量</th>
-                </tr>
-            </thead>
-            <tbody>
-                { listItem }
-            </tbody>
-        </Table>
-        <FontAwesomeIcon icon={["fas", "spinner"]} className={'fa-spin fa-3x fa-fw position-absolute absolute-center ' + (loading ? 'visible' : 'invisible')}/>
+        <div className="overflow-hidden">
+            <Table striped bordered hover className="w-100">
+                <caption className="text-right">更新時間：{ updateTime }</caption>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>縣市名稱</th>
+                        <th>分局名稱</th>
+                        <th>地址</th>
+                        <th>電話</th>
+                        <th>營業時間</th>
+                        <th>營業備註</th>
+                        <th>存量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    { listItem }
+                </tbody>
+            </Table>
+            { paginationBasic }
+            <Spinner animation="border" role="status" className={'position-absolute absolute-bottom ' + (loading ? 'visible' : 'invisible')}>
+                <span className="sr-only">Loading...</span>
+            </Spinner>
         </div>
     )
 }

@@ -6,25 +6,31 @@ const CusTable = (props) => {
     const [data, setData] = useState([]);
     const [updateTime, setUpdateTime] = useState('');
     const [page, setPage] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
+    const [active, setActive] = useState(0);
     const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         fetch();
     }, []);
+
     function fetch() {
         setLoading(true);
         axios
             .get('https://3000.gov.tw/hpgapi-openmap/api/getPostData')
             .then((resp) => {
-                setUpdateTime(resp.data[0].updateTime)
-                setData(resp
-                            .data
-                            .filter((el) => {
-                                return props.county.selected ? el.hsnCd === props.county.selected : el
-                            })
-                            .filter((el) => {
-                                return props.township.selected ? el.townNm === props.township.selected : el
-                            }));
+                const respData = resp.data
+                    .filter((el) => {
+                        return props.county.selected ? el.hsnCd === props.county.selected : el
+                    })
+                    .filter((el) => {
+                        return props.township.selected ? el.townNm === props.township.selected : el
+                    });
+                setUpdateTime(respData[0].updateTime)
+                setData(respData);
+                setTotalPage(respData.length / 50);
                 setLoading(false);
+                setActive(0);
             });
     }
     useEffect(() => {
@@ -46,17 +52,18 @@ const CusTable = (props) => {
             <td>{ el.total }</td>
         </tr>
     ));
+
     const changePage = (i) => {
         if (i >= 0 && i <= totalPage) {
             setPage(i);
+            setActive(i);
         }
     }
-    let active = page;
-    let totalPage = data.length / 50;
+
     let items = [];
-    for (let number = 0; number <= totalPage; number++) {
+    for (let number = 1; number < totalPage; number++) {
         if (active < 3) {
-            if (number > 0 && number < active +4 || number > totalPage - 3) {
+            if (number < active +4 || number > totalPage - 3) {
                 items.push(
                     <Pagination.Item key={ number } active={ number === active } onClick={ () => changePage(number) }>
                         {number+1}
@@ -66,7 +73,7 @@ const CusTable = (props) => {
                 items.push(<Pagination.Ellipsis key="ellipsis-1" />)
             }
         } else {
-            if (number > 0 && number < 2 || number > active - 2 && number < active + 2 || number > totalPage - 2) {
+            if (number < 2 || number > active - 2 && number < active + 2 || number > totalPage - 2) {
                 items.push(
                     <Pagination.Item key={ number } active={ number === active } onClick={ () => changePage(number) }>
                         {number+1}
@@ -84,12 +91,12 @@ const CusTable = (props) => {
     const paginationBasic = (
         <div className="d-flex justify-content-center">
             <Pagination>
-                <Pagination.First onClick={ () => changePage(1) } ></Pagination.First>
+                <Pagination.First onClick={ () => changePage(1) }></Pagination.First>
                 <Pagination.Prev onClick={ () => changePage(page-1) } />
-                <Pagination.Item onClick={ () => changePage(0) } >1</Pagination.Item>
+                <Pagination.Item key="0" active={ active === 0} onClick={ () => changePage(0) }>1</Pagination.Item>
                 { items }
                 <Pagination.Next onClick={ () => changePage(page+1) } />
-                <Pagination.Last onClick={ () => changePage(totalPage) } ></Pagination.Last>
+                <Pagination.Last onClick={ () => changePage(totalPage) }></Pagination.Last>
             </Pagination>
         </div>
     );

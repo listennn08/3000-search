@@ -5,36 +5,35 @@ import { FormControl, Row, Col } from 'react-bootstrap';
 const TownshipSelect = (props) => {
     const [ options, setOptions ] = useState([]);
     useEffect(() => {
+        const getOptionsItem = () => {
+            if (props.county.selected) {
+                $.get(`https://api.nlsc.gov.tw/other/ListTown1/${props.county.selected}`,
+                (resp) => {
+                    if ($(resp).find('townItem').length > 0) {
+                        const data = [...$(resp).find('townItem')]
+                            .filter((el) => $(el).find('towncode01').html())
+                            .map((el) => {
+                                if ($(el).find('townname').html().indexOf('臺灣省') > -1) {
+                                    $(el).find('townname').html(
+                                        $(el).find('townname').html().replace('臺灣省', '')
+                                    )
+                                } else if ($(el).find('townname').html().indexOf('福建省') > -1) {
+                                    $(el).find('townname').html(
+                                    $(el).find('townname').html().replace('福建省', '')
+                                    )
+                                }
+                                return {
+                                    text: $(el).find('townname').html().replace(props.county.selectedName, ''),
+                                    val: $(el).find('townname').html().replace(props.county.selectedName, ''),
+                                }
+                            });
+                        setOptions(data);
+                    }
+                })
+            }
+        }
         getOptionsItem();
     }, [props.county.selected, props.county.selectedName]);
-    const getOptionsItem = () => {
-        if (props.county.selected) {
-            $.get(`https://api.nlsc.gov.tw/other/ListTown1/${props.county.selected}`,
-            (resp) => {
-                if ($(resp).find('townItem').length > 0) {
-                    const data = [...$(resp).find('townItem')]
-                        .filter((el) => $(el).find('towncode01').html())
-                        .map((el) => {
-                            if ($(el).find('townname').html().indexOf('臺灣省') > -1) {
-                                $(el).find('townname').html(
-                                    $(el).find('townname').html().replace('臺灣省', '')
-                                )
-                            } else if ($(el).find('townname').html().indexOf('福建省') > -1) {
-                                $(el).find('townname').html(
-                                $(el).find('townname').html().replace('福建省', '')
-                                )
-                            }
-                            return {
-                                text: $(el).find('townname').html().replace(props.county.selectedName, ''),
-                                val: $(el).find('townname').html().replace(props.county.selectedName, ''),
-                            }
-                        });
-                    setOptions(data);
-                }
-
-            })
-        }
-    }
     const getTownship = (e) => {
         const township = {
             selected: e.target.value,

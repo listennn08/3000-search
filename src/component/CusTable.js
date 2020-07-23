@@ -11,34 +11,28 @@ const CusTable = (props) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        const fetch = () => {
+            setLoading(true);
+            axios
+                .get('https://3000.gov.tw/hpgapi-openmap/api/getPostData')
+                .then((resp) => {
+                    const respData = resp.data
+                        .filter((el) => {
+                            return props.county.selected ? el.hsnCd === props.county.selected : el
+                        })
+                        .filter((el) => {
+                            return props.township.selected ? el.townNm === props.township.selected : el
+                        });
+                    setUpdateTime(respData[0].updateTime)
+                    setData(respData);
+                    setTotalPage(respData.length / 50);
+                    setLoading(false);
+                    setActive(0);
+                });
+        }
         fetch();
-    }, []);
+    }, [props.county.selected, props.township.selected]);
 
-    function fetch() {
-        setLoading(true);
-        axios
-            .get('https://3000.gov.tw/hpgapi-openmap/api/getPostData')
-            .then((resp) => {
-                const respData = resp.data
-                    .filter((el) => {
-                        return props.county.selected ? el.hsnCd === props.county.selected : el
-                    })
-                    .filter((el) => {
-                        return props.township.selected ? el.townNm === props.township.selected : el
-                    });
-                setUpdateTime(respData[0].updateTime)
-                setData(respData);
-                setTotalPage(respData.length / 50);
-                setLoading(false);
-                setActive(0);
-            });
-    }
-    useEffect(() => {
-        fetch();
-    }, [props.county.selected]);
-    useEffect(() => {
-        fetch();
-    }, [props.township.selected]);
     const urlBase = 'https://www.google.com.tw/maps/place/'
     let listItem = data.slice(page*50, (page+1)*50).map((el, index) => (
         <tr key={ index }>
@@ -73,7 +67,7 @@ const CusTable = (props) => {
                 items.push(<Pagination.Ellipsis key="ellipsis-1" />)
             }
         } else {
-            if (number < 2 || number > active - 2 && number < active + 2 || number > totalPage - 2) {
+            if ((number < 2 || number > active - 2) && (number < active + 2 || number > totalPage - 2)) {
                 items.push(
                     <Pagination.Item key={ number } active={ number === active } onClick={ () => changePage(number) }>
                         {number+1}
@@ -85,7 +79,6 @@ const CusTable = (props) => {
                 items.push(<Pagination.Ellipsis key="ellipsis-2" />)
             } 
         }
-
     }
 
     const paginationBasic = (
@@ -100,7 +93,7 @@ const CusTable = (props) => {
             </Pagination>
         </div>
     );
-    return(
+    return (
         <div className="overflow-hidden">
             <Table striped bordered hover className="w-100">
                 <caption className="text-right">更新時間：{ updateTime }</caption>
@@ -121,10 +114,15 @@ const CusTable = (props) => {
                 </tbody>
             </Table>
             { paginationBasic }
-            <Spinner animation="border" role="status" className={'position-absolute absolute-bottom ' + (loading ? 'visible' : 'invisible')}>
+            <Spinner
+                animation="border"
+                role="status"
+                className={ 'position-absolute absolute-bottom ' + (loading ? 'visible' : 'invisible') }
+            >
                 <span className="sr-only">Loading...</span>
             </Spinner>
         </div>
-    )
-}
+    );
+};
+
 export default CusTable;

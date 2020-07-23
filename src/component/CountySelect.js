@@ -4,11 +4,7 @@ import { FormControl, Row, Col } from 'react-bootstrap';
 const CountySelect = (props) => {
     const optionsItem = props.options.map((el, index) => <option value={ el.val } key={ index }>{ el.text }</option>);
     const getCounty = (e) => {
-        const name = props.options.filter((el) => {
-                if (el.val === e.target.value) {
-                    return el.text;
-                }
-            })[0].text;
+        const name = props.options.filter((el) => el.val === e.target.value)[0].text;
         const county = {
             selected: e.target.value,
             selectedName: name
@@ -34,6 +30,6 @@ const CountySelect = (props) => {
                 </Col>
             </Row>
     );
-}
+};
 
 export default CountySelect;

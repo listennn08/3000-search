@@ -51,7 +51,6 @@ const CusTable = (props) => {
 
   const changePage = (i) => {
     if (i >= 0 && i <= totalPage) {
-      console.log(i);
       setPage(i);
       setActive(i);
     }

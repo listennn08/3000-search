@@ -66,6 +66,7 @@ const SearchArea = (props) => {
   const passData = (data) => {
     props.setPosition([data.latitude, data.longitude]);
     setShow(false);
+    props.setShow(false);
   };
   
   const search = (e) => setSearchKeywords(e.target.value);

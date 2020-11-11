@@ -13,15 +13,9 @@ const TownshipSelect = (props) => {
             const data = [...$(resp).find('townItem')]
               .filter((el) => $(el).find('towncode01').html())
               .map((el) => {
-                if ($(el).find('townname').html().indexOf('臺灣省') > -1) {
-                  $(el).find('townname').html(
-                    $(el).find('townname').html().replace('臺灣省', '')
-                  )
-                } else if ($(el).find('townname').html().indexOf('福建省') > -1) {
-                  $(el).find('townname').html(
-                    $(el).find('townname').html().replace('福建省', '')
-                  )
-                }
+                $(el).find('townname').html(
+                  $(el).find('townname').html().replace(/(臺灣|福建)省/, '')
+                );
                 return {
                   text: $(el).find('townname').html().replace(props.county.selectedName, ''),
                   val: $(el).find('townname').html().replace(props.county.selectedName, ''),
@@ -35,11 +29,10 @@ const TownshipSelect = (props) => {
     getOptionsItem();
   }, [props.county.selected, props.county.selectedName]);
   const getTownship = (e) => {
-    const township = {
+    props.setTownship({
       selected: e.target.value,
       selectedName: e.target.value,
-    };
-    props.callback({ township })
+    });
   }
   const optionsItem = options.map((el, index) => <option value={ el.val } key={ index }>{ el.text }</option>);
   

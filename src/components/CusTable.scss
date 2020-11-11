@@ -1,0 +1,18 @@
+@mixin pad {
+  @media screen and (max-width: 992px) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media screen and (max-width: 414px) {
+    @content;
+  }
+}
+
+.desktop {
+
+  @include mobile {
+    display: none;
+  }
+}

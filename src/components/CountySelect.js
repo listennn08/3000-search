@@ -5,17 +5,15 @@ const CountySelect = (props) => {
   const optionsItem = props.options.map((el, index) => <option value={ el.val } key={ index }>{ el.text }</option>);
   const getCounty = (e) => {
     const name = props.options.filter((el) => el.val === e.target.value)[0].text;
-    const county = {
+
+    props.setCounty({
       selected: e.target.value,
       selectedName: name
-    };
-    props.callback({ county });
-    props.callback({
-      township: {
+    });
+    props.setTownship({
         selected: '',
         selectedName: '',
-      }
-    })
+    });
   }
   return (
     <Row className='justify-content-md-center mt-2 mb-2'>

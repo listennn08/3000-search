@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter as Router, Switch, Route, Link,
+  HashRouter, Switch, Route, Link,
 } from 'react-router-dom';
 import { Navbar, Nav, NavLink } from 'react-bootstrap';
 import SearchTable from './page/SearchTable';
@@ -12,7 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class App extends Component {
   render() {
     return (
-      <Router basename="3000-search">
+      <HashRouter>
         <div className='App'>
           <Navbar  bg='dark' variant='dark' expand='lg' >
             <Navbar.Brand  href='#'>振興券郵局庫存速查</Navbar.Brand>
@@ -31,7 +31,7 @@ class App extends Component {
           </Switch>
           <footer className='bg-light position-fixed fixed-bottom'>made by listennn08.</footer>
         </div>
-      </Router>
+      </HashRouter>
     );
   }
 }

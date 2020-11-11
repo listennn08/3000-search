@@ -3,7 +3,6 @@ import L from 'leaflet';
 
 class Legend extends MapControl {
   createLeafletElement(props) {
-    console.log('1');
     const colorObjs = [
       {
         color: "8d8",

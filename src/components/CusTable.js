@@ -46,7 +46,6 @@ const CusTable = (props) => {
   }, [props.county.selected, props.township.selected]);
   const urlBase = 'https://www.google.com.tw/maps/place/';
   let listItem;
-  console.log(page, data)
   if (data.length) {
     listItem = data[page].map((el, index) => (
       <tr key={ index }>

@@ -2,9 +2,9 @@
 * {
   font-family: 'Noto Sans TC', sans-serif;
 }
+
 .App {
   text-align: center;
-  overflow-x: hidden;
   width: 100vw;
   height: 100vh;
 }

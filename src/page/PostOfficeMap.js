@@ -4,6 +4,7 @@ import Legend from '../components/Legend';
 import $ from 'jquery';
 import SearchArea from '../components/SearchArea';
 import Icon from '../components/Icon';
+import { getColor } from '../utils';
 import 'leaflet/dist/leaflet.css'
 import './PostOfficeMap.scss'
 
@@ -36,42 +37,32 @@ const PostOfficeMap = () => {
     setZoom(18);
   }, [position]);
 
-  const getColor = (admissible, remaining) => {
-    if (admissible) {
-      admissible = admissible.replace(/.*(?:<br>|^)+\*(.*)<br>/, '$1').replace(/本日可受理量：(\w+)/, '$1');
-      if (admissible.includes('本日未營業')) return '#c0c0c0';
-      const percent = (remaining/admissible) * 100;
-      switch (true) {
-        case percent > 80:
-          return "#8d8";
-        case percent > 50:
-          return "#fa0";
-        case percent > 30:
-          return "#f00";
-        default:
-          return "#c0c0c0";
-      }
-    }
-  };
+
   const  distance = (lat1, lon1, lat2, lon2, unit = "K") => {
     if ((lat1 === lat2) && (lon1 === lon2)) {
       return 0;
     }
-    const radlat1 = Math.PI * lat1/180;
-    const radlat2 = Math.PI * lat2/180;
+    const radlat1 = Math.PI * lat1 / 180;
+    const radlat2 = Math.PI * lat2 / 180;
     const theta = lon1 - lon2;
-    const radtheta = Math.PI * theta/180;
+    const radtheta = Math.PI * theta / 180;
     let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
     if (dist > 1) {
       dist = 1;
     }
     dist = Math.acos(dist);
-    dist = dist * 180/Math.PI;
+    dist = dist * 180 / Math.PI;
     dist = dist * 60 * 1.1515;
-    if (unit === "K") { dist = dist * 1.609344 }
-    if (unit === "N") { dist = dist * 0.8684 }
+    if (unit === "K") {
+      dist = dist * 1.609344
+    }
+    if (unit === "N") {
+      dist = dist * 0.8684
+    }
+
     return dist;
   }
+
   return (
     <>
       <SearchArea

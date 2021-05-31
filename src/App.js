@@ -15,7 +15,7 @@ class App extends Component {
       <HashRouter>
         <div className='App'>
           <Navbar  bg='dark' variant='dark' expand='lg' >
-            <Navbar.Brand  href='#'>振興券郵局庫存速查</Navbar.Brand>
+              <Navbar.Brand  href='#'>振興券郵局庫存速查</Navbar.Brand>
             <Nav>
               <NavLink as={ Link } className='text-light' to="/">表格</NavLink>
               <NavLink as={ Link } className='text-light' to="/map">地圖</NavLink>
@@ -29,7 +29,7 @@ class App extends Component {
               <PostOfficeMap />
             </Route>
           </Switch>
-          <footer className='bg-light position-fixed fixed-bottom'>made by listennn08.</footer>
+          <footer className='bg-light position-fixed fixed-bottom text-center'>made by listennn08.</footer>
         </div>
       </HashRouter>
     );

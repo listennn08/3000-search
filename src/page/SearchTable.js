@@ -40,7 +40,7 @@ const SearchTable = () => {
 
 return (
   <>
-    <Container>
+    <Container fluid>
       <CountySelect
         options={ cnOptions }
         county={ county }

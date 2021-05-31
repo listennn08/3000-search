@@ -64,7 +64,7 @@ const CusTable = (props) => {
         <Card style={{'background': getColor(el.busiMemo, el.total)}}>
           <Card.Body>
             <Card.Title>{el.storeNm}</Card.Title>
-            <Card.Text>
+            <Card.Text className="mb-1">
               聯絡電話：{el.tel}<br />
               <span dangerouslySetInnerHTML={{__html: el.busiTime}} />
               <span dangerouslySetInnerHTML={{__html: el.busiMemo}} />
